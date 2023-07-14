@@ -1,4 +1,5 @@
 import { useState } from "react";
+import StarRating from "./StarRating";
 
 const tempMovieData = [
   {
@@ -68,6 +69,7 @@ export default function App() {
           }
         />
       </Main>
+      <StarRating maxRating={8} />
     </>
   );
 }
