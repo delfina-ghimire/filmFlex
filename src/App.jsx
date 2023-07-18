@@ -69,7 +69,7 @@ export default function App() {
           }
         />
       </Main>
-      <StarRating maxRating={8} />
+      <StarRating messages={["Terrible", "Bad", "Ok", "Good", "Excellent"]} />
     </>
   );
 }
