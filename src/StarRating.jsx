@@ -43,7 +43,7 @@ export default function StarRating({
       <div style={starContainerStyle}>
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
-            key={Date.now}
+            key={i}
             onRate={() => setRating(i + 1)}
             onHoverIn={() => setTempRating(i + 1)}
             onHoverOut={() => setTempRating(0)}
@@ -59,7 +59,6 @@ export default function StarRating({
           ? messages[tempRating ? tempRating - 1 : rating - 1]
           : tempRating || rating || ""}
       </p>
-      {console.log(messages.length, maxRating)}
     </div>
   );
 }
