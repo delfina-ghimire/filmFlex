@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
+import "./index.css";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -9,37 +10,47 @@ const KEY = "468d5e8d";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("inception");
   const tempQuery = "interstellar";
 
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setLoading(true);
-        const res = await fetch(
-          `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${tempQuery}`
-        );
-
-        if (!res.ok)
-          throw new Error(
-            "Something Went Wrong! Please try again after sometime."
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError("");
+          const res = await fetch(
+            `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
           );
 
-        const data = await res.json();
-        console.log(data);
-        if (data.Response === "False") throw new Error("Movie not Found");
-        setMovies(data.Search);
-      } catch (error) {
-        console.log(error.messages);
-        setError(error.messages);
-      } finally {
-        setLoading(false);
+          if (!res.ok)
+            throw new Error(
+              "Something Went Wrong! Please try again after sometime."
+            );
+
+          const data = await res.json();
+          console.log(data);
+          if (data.Response === "False") throw new Error("Movie not Found");
+          setMovies(data.Search);
+        } catch (error) {
+          console.log(error.message);
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
-    fetchMovies();
-  }, []);
+
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        return;
+      }
+      fetchMovies();
+    },
+    [query]
+  );
 
   return (
     <>
@@ -49,20 +60,15 @@ export default function App() {
       </Navbar>
 
       <Main>
-        <Box element={<MoviesList movies={movies} />}>
-          {/* {loading ? <Loader/> : <MoviesList movies={movies}/>} */}
-          {loading && <Loader />}
-          {loading && !error && <MoviesList movies={movies} />}
+        <Box>
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MoviesList movies={movies} />}
           {error && <ErrorMessage message={error} />}
         </Box>
-        <Box
-          element={
-            <>
-              <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
-            </>
-          }
-        />
+        <Box>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </Box>
       </Main>
       <StarRating messages={["Terrible", "Bad", "Ok", "Good", "Excellent"]} />
     </>
@@ -94,7 +100,7 @@ function Navbar({ children }) {
 function NumResults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>{movies.length}</strong> results
+      Found <strong>{movies?.length}</strong> results
     </p>
   );
 }
@@ -124,7 +130,7 @@ function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-function Box({ element }) {
+function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -132,7 +138,7 @@ function Box({ element }) {
       <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? "–" : "+"}
       </button>
-      {isOpen && element}
+      {isOpen && children}
     </div>
   );
 }
@@ -195,7 +201,7 @@ function WatchedMoviesList({ watched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovie movie={movie} />
+        <WatchedMovie movie={movie} key={movie} />
       ))}
     </ul>
   );
