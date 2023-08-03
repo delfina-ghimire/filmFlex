@@ -40,7 +40,7 @@ FilmFlex is a movie search and watchlist web application that allows users to se
 Before running the application, make sure you have the following prerequisites installed:
 
 - Node.js (>=12.0.0)
-- npm (Node Package Manager)
+  
 
 ### Installation
 
@@ -70,7 +70,7 @@ Open your web browser and go to `http://localhost:5173` to access the app.
 ## Usage
 
 1. **Movie Search:**
-   - Enter the title of the movie you want to search for in the search bar.
+   - Enter the movie title you want to search for in the search bar.
    - The app will display a list of movies matching the search query.
    - Click on a movie from the search results to view its details.
 
