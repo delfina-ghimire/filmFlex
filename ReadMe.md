@@ -19,7 +19,7 @@ FilmFlex is a movie search and watchlist web application that allows users to se
 
 ## Demo
 
-[Live Demo](https://www.example.com) - [Insert link to a live demo of the application if available]
+[Live Demo](https://film-flex.vercel.app/)
 
 ## Features
 
