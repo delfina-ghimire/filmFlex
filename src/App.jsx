@@ -9,7 +9,7 @@ import { MovieDetails } from "./components/MovieDetails";
 import { MoviesList } from "./components/MoviesList";
 import { NumResults } from "./components/NumResults";
 import { SearchBar } from "./components/SearchBar";
-import { Box } from "./Box";
+import { Box } from "./components/Box";
 
 export const average = (arr) =>
   arr.reduce((acc, cur) => acc + cur / arr.length, 0);
