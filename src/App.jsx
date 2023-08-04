@@ -11,6 +11,7 @@ import { NumResults } from "./components/NumResults";
 import { SearchBar } from "./components/SearchBar";
 import { Box } from "./components/Box";
 import { useMovies } from "./hooks/useMovie";
+import { useLocalStorageState } from "./hooks/useLocalStorageState";
 
 export const average = (arr) =>
   arr.reduce((acc, cur) => acc + cur / arr.length, 0);
@@ -23,12 +24,7 @@ export default function App() {
 
   const { movies, isLoading, error } = useMovies(query, handleCloseMovie);
 
-  // Retrieve value from local storage (lazy initial state : here the function should be pure without any arguments)
-  // const [watched, setWatched] = useState([]);
-  const [watched, setWatched] = useState(function () {
-    const storedValue = localStorage.getItem("watched");
-    return JSON.parse(storedValue);
-  });
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectedMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -46,13 +42,6 @@ export default function App() {
   function handleDeleteWatched(id) {
     setWatched(watched.filter((movie) => movie.imdbID !== id));
   }
-
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
 
   return (
     <>
