@@ -1,4 +1,15 @@
+import { useEffect, useRef } from "react";
+import { useKey } from "../hooks/useKey";
+
 export function SearchBar({ query, setQuery }) {
+  const inputElement = useRef(null);
+
+  useKey("Enter", function () {
+    if (document.activeElement === inputElement.current) return;
+    inputElement.current.focus();
+    setQuery("");
+  });
+
   return (
     <input
       className="search"
@@ -6,6 +17,7 @@ export function SearchBar({ query, setQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputElement}
     />
   );
 }
